@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/* struct com os atributos linha e coluna */
 typedef struct {
 	int linha;
 	int coluna;
@@ -11,6 +12,7 @@ int count = 0; /* este dado eh compartilhado pela(s) thread(s) */
 void* runner(void* param); /* threads chamam essa funcao */
 int i, j;
 
+/* criando a matriz aleatória */
 void matriz_aleatoria(int matriz[10000][10000]) {
 	srand(time(NULL));
 
@@ -46,7 +48,7 @@ int isPrime(int num) {
 
 	return 1;
 }
-
+/* atribui aos atributos a posição que a linha e a coluna devem processar */
 void* runner(void* param) { 
 	Thread* t = (Thread*)param;
 	int linha = t->linha;
@@ -55,10 +57,10 @@ void* runner(void* param) {
 }
 int main(int argc, char* argv[]) {
 	int matriz[10000][10000];
-	Thread thread[8];
+	Thread thread[8]; /* chamando struct */
 	pthread_t tid[8]; /* o identificador da thread */
 	pthread_attr_t attr;  /*os atributos da thread*/
-	pthread_mutex_t mutex;
+	pthread_mutex_t mutex; /* criando mutex */
 	pthread_attr_init(&attr); /* ajusta os atributos padrao da thread */
 	pthread_mutex_init(&mutex, NULL);
 	matriz_aleatoria(matriz[10000][10000]);
@@ -70,11 +72,11 @@ int main(int argc, char* argv[]) {
 	
 	pthread_exit(NULL);
 
-
+	/* atribuindo qual macrobloco será atribuido a thread */
 	for (int a = 0; a < 10000; a += 100) {
 		for (int b = 0; b < 10000; b += 100) {
 			thread[count].linha = a;
-			thread[count].linha = b;
+			thread[count].coluna = b;
 			
 
 		}
@@ -82,11 +84,7 @@ int main(int argc, char* argv[]) {
 	for (int i = 0; i < 8; i++) { //Uma thread esperar a outra
 		pthread_join(tid[i], NULL);
 	}
+	pthread_exit(0);
 
 	
 }
-
-
-
-	//pthread_exit(0);
-//}
