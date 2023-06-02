@@ -58,7 +58,7 @@ void* runner(void* param) { /* threads chamam essa funcao */
 	Thread* t = (Thread*)param;
 	int linha = t->linha;
 	int coluna = t->coluna;
-	printf("O bloco que est· sendo processado È: [%d, %d]\n", linha, coluna);
+	printf("O bloco que est√° sendo processado √©: [%d, %d]\n", linha, coluna);
 	for (int i = linha; i < linha + 100; i++) {
 		for (int j = coluna; j < coluna + 100; j++) {
 			if (isPrime(matriz[i][j])) {
@@ -67,7 +67,7 @@ void* runner(void* param) { /* threads chamam essa funcao */
 		}
 		pthread_mutex_lock(&mutex);
 		contador_primos_total += count2;
-		printf("A quantidade de primos nesse bloco s„o: [%d, %d]: %d\n", linha, coluna, count2);
+		printf("A quantidade de primos nesse bloco s√£o: [%d, %d]: %d\n", linha, coluna, count2);
 		pthread_mutex_unlock(&mutex);
 		pthread_exit(0);
 	}
@@ -81,6 +81,10 @@ int main(int argc, char* argv[]) {
 	pthread_attr_init(&attr); /* ajusta os atributos padrao da thread */
 	pthread_mutex_init(&mutex, NULL);
 	matriz_aleatoria(matriz[10000][10000]);
+	clock_t beginSerial;
+	clock_t endSerial;
+	clock_t beginParalelo;
+	clock_t endParalelo;
 	
 	for (int i = 1; i <= 8; i++) {
 		pthread_create(&tid[i], &attr, runner, argv[1]); /* cria a thread */
