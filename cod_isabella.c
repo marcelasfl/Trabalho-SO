@@ -77,6 +77,7 @@ int main(int argc, char* argv[]) {
 		for (int b = 0; b < 10000; b += 100) {
 			thread[count].linha = a;
 			thread[count].coluna = b;
+			count++;
 			
 
 		}
