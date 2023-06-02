@@ -64,7 +64,12 @@ int main(int argc, char* argv[]) {
 	pthread_attr_init(&attr); /* ajusta os atributos padrao da thread */
 	pthread_mutex_init(&mutex, NULL);
 	matriz_aleatoria(matriz[10000][10000]);
+	clock_t beginSerial = 0;
+	clock_t endSerial = 0;
+	clock_t beginParalelo = 0;
+	clock_t endParalelo = 0;
 	
+
 	for (int i = 1; i <= 8; i++) {
 		pthread_create(&tid[i], &attr, runner, argv[1]); /* cria a thread */
 		pthread_join(tid[i], NULL);
