@@ -1,6 +1,8 @@
 #pragma once
+
+#define HAVE_STRUCT_TIMESPEC
+#include <pthread.h> 
 #include <time.h>
-#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -10,7 +12,7 @@ typedef struct {
 } Thread;
 
 int count = 0; /* este dado eh compartilhado pela(s) thread(s) */
-int count2 = 0; /*contador dos primos*/ 
+int count2 = 0; /*contador dos primos*/
 int contador_primos_total = 0;
 int i, j;
 int matriz[10000][10000];
@@ -71,27 +73,26 @@ void* runner(void* param) { /* threads chamam essa funcao */
 		pthread_mutex_unlock(&mutex);
 		pthread_exit(0);
 	}
-	
+
 }
 int main(int argc, char* argv[]) {
-	int matriz[10000][10000];
 	Thread thread[8];
 	pthread_t tid[8]; /* o identificador da thread */
 	pthread_attr_t attr;  /*os atributos da thread*/
 	pthread_attr_init(&attr); /* ajusta os atributos padrao da thread */
 	pthread_mutex_init(&mutex, NULL);
-	matriz_aleatoria(matriz[10000][10000]);
+	matriz_aleatoria(matriz);
 	clock_t beginSerial;
 	clock_t endSerial;
 	clock_t beginParalelo;
 	clock_t endParalelo;
-	
+
 	for (int i = 1; i <= 8; i++) {
 		pthread_create(&tid[i], &attr, runner, argv[1]); /* cria a thread */
 		pthread_join(tid[i], NULL);
 	} /* espera pelo termino da thread */
-	
-	
+
+
 
 	for (int a = 0; a < 10000; a += 100) {
 		for (int b = 0; b < 10000; b += 100) {
@@ -99,7 +100,7 @@ int main(int argc, char* argv[]) {
 			thread[count].coluna = b;
 			pthread_create(&tid[count2], NULL, runner, &thread[count2]);
 			count++;
-			
+
 
 		}
 	}
@@ -107,9 +108,9 @@ int main(int argc, char* argv[]) {
 		pthread_join(tid[i], NULL);
 	}
 
-	
+
 	pthread_mutex_destroy(&mutex);
 	pthread_exit(NULL);
-	
+
 }
 
